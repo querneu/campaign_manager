@@ -12,19 +12,31 @@ module.exports = (passport) => {
                 })
                     .then(
                         (apelido) => {
+                            //Verifica se o login existe
                             if (!apelido) {
+                                //Se não existir retorna false
                                 return done(null, false, { message: "Login e/ou senha inválidos." })
                             }
                             bcrypt.compare(senha, apelido.senha, (erro, equalsPassword) => {
                                 if (equalsPassword) {
+                                    //Acessa o sistema
                                     return done(null, apelido)
                                 } else {
-                                    return done(null, false, { message: "Login e/ou senha inválidos" })
+                                    // Se existir, porem senha errada
+                                    return done(null, false, { message: "Senha inválida." })
                                 }
                             })
                         }
                     )
             }
-        ))
+        )
+    )
+    passport.serializeUser((apelido, done)=>{
+        done(null,apelido)
+    })
+    passport.deserializeUser((apelido,done)=>{
+        done(null,apelido)
+    })
+    
 }
 
